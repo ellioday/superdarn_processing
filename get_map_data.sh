@@ -1,11 +1,11 @@
 #Load path to luna data
 luna_path=$(</home/elliott/Documents/python_analysis/superdarn_data_path.txt)
-fitacf_path="${luna_path}/fitacf/"
-
 #get stations where data is requested
 stations=("fhe" "bks")
 start_date="2013/10/02_00:00:00"
 end_date="2013/10/02_23:59:59"
+
+fitacf_path="${luna_path}/fitacf/${start_date:0:4}"
 
 #function to check if one date is less than another
 date_compare() {
@@ -15,18 +15,18 @@ date_compare() {
 	date2=$2
 
 	YY1=${date1:0:4}
-	MM1=${date1:5:2}
-	DD1=${date1:8:2}
-	hh1=${date1:11:2}
-	mm1=${date1:14:2}
-	ss1=${date1:17:2}
+	MM1=$(echo ${date1:5:2} | sed 's/^0*//')
+	DD1=$(echo ${date1:8:2} | sed 's/^0*//')
+	hh1=$(echo ${date1:11:2} | sed 's/^0*//')
+	mm1=$(echo ${date1:14:2} | sed 's/^0*//')
+	ss1=$(echo ${date1:17:2} | sed 's/^0*//')
 
-	YY2=${date2:0:4}
-	MM2=${date2:5:2}
-	DD2=${date2:8:2}
-	hh2=${date2:11:2}
-	mm2=${date2:14:2}
-	ss2=${date2:17:2}
+	YY2=$(echo ${date2:0:4} | sed 's/^0*//')
+	MM2=$(echo ${date2:5:2} | sed 's/^0*//')
+	DD2=$(echo ${date2:8:2} | sed 's/^0*//')
+	hh2=$(echo ${date2:11:2} | sed 's/^0*//')
+	mm2=$(echo ${date2:14:2} | sed 's/^0*//')
+	ss2=$(echo ${date2:17:2} | sed 's/^0*//')
 
 	if [[ $MM1 -gt $MM2 ]]
 	then
@@ -36,10 +36,10 @@ date_compare() {
 		retval="<"
 	#otherwise monhts are equal
 	else
-		if [[ $DD1 -lt $DD1 ]]
+		if [[ $DD1 -lt $DD2 ]]
 		then
 			retval="<"
-		elif [[ $DD1 -gt $DD1 ]]
+		elif [[ $DD1 -gt $DD2 ]]
 		then
 			retval=">"
 		#otherwise days are equal so...
@@ -69,4 +69,18 @@ date_compare() {
 	echo "$date1 $retval $date2"
 }
 
-date_compare $start_date $end_date
+#test date_compare function
+#all less than scenarios (month -> day -> hour -> minute -> second)
+#echo "less than tests:"
+#date_compare "2013/09/02_00:00:00" "2013/10/02_00:00:00"
+#date_compare "2013/10/01_00:00:00" "2013/10/02_00:00:00"
+#date_compare "2013/10/02_00:00:00" "2013/10/02_10:10:10"
+#date_compare "2013/10/02_10:00:00" "2013/10/02_10:10:10"
+#date_compare "2013/10/02_10:10:00" "2013/10/02_10:10:10"
+#test greater than scenarios (month -> day -> hour -> minute -> second)
+#echo "greater than tests:"
+#date_compare "2013/11/02_00:00:00" "2013/10/02_00:00:00"
+#date_compare "2013/10/03_00:00:00" "2013/10/02_00:00:00"
+#date_compare "2013/10/02_10:00:00" "2013/10/02_00:00:00"
+#date_compare "2013/10/02_10:10:00" "2013/10/02_10:00:00"
+#date_compare "2013/10/02_10:10:10" "2013/10/02_10:10:00"
