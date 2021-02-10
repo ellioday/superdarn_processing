@@ -1,11 +1,13 @@
 #Load path to luna data
-luna_path=$(</home/elliott/Documents/python_analysis/superdarn_data_path.txt)
+luna_path=$(</home/elliott/Documents/python_analysis/luna_path.txt)
 #get stations where data is requested
 stations=("fhe" "bks")
+rad="fhe"
 start_date="2013/10/02_00:00:00"
 end_date="2013/10/02_23:59:59"
+year=${start_date:0:4}
 
-fitacf_path="${luna_path}/fitacf/${start_date:0:4}"
+fitacf_path="${luna_path}data/superdarn/fitacf/"
 
 #function to check if one date is less than another
 date_compare() {
@@ -84,3 +86,31 @@ date_compare() {
 #date_compare "2013/10/02_10:00:00" "2013/10/02_00:00:00"
 #date_compare "2013/10/02_10:10:00" "2013/10/02_10:00:00"
 #date_compare "2013/10/02_10:10:10" "2013/10/02_10:10:00"
+
+#get all filenames in directory
+#fitacf_fnames=$(ls "$fitacf_path$(echo ${stations[0]})/$year/")
+
+#check if year is a leap year
+isleap() {
+	in_year=$1
+	(( !(in_year % 4) && ( in_year % 100 || !(in_year % 400) ) )) &&
+		leapyear=true || leapyear=false
+}
+
+#get number of days in each month for this year
+isleap $year
+if [[ $leapyear ]];
+then
+	days=(31 28 31 30 31 30 31 31 30 31 30 31)
+else
+	days=(31 29 31 30 31 30 31 31 30 31 30 31)
+fi
+
+#convert each day's worth of fitacf into grid files
+for ((month = 1 ; month<=12 ; month++)) do
+	month_02d=$(printf %02d $month)
+	for ((day = 1 ; day<=${days[$i]} ; day++)) do
+		day_02d=$(printf %02d $day)
+		make_grid -vb -tl 60 -xtd -c $year$month_02d$day_02d.*.*.$rad.fitacf > ${luna_path}users/daye1/Superdarn/Data/grid/$year$month_02d$day_02d.$rad.grd
+	done
+done
