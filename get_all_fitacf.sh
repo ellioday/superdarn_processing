@@ -6,13 +6,9 @@ end_date=$2
 verbose=${3:-0} #set verbose mode either 0 (none) 1(some) 2(all)
 start_rad=${4:-0} #set which radar to start from (0=ade)
 
-for rad in "${stations[@]}"
+for ((i=$start_rad; i<=${#stations[@]}; i++}))
 do
-	for ((i=1; i<=$start_rad; i++))
-	do
-		continue
-	fi
-
+	rad=${stations[i]}
 	echo "$rad"
 	source get_fitacf.sh "$rad" "$start_date" "$end_date" "$verbose"
 done
