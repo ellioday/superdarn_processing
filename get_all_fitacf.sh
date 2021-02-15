@@ -6,7 +6,7 @@ end_date=$2
 verbose=${3:-0} #set verbose mode either 0 (none) 1(some) 2(all)
 start_rad=${4:-0} #set which radar to start from (0=ade)
 
-for ((i=$start_rad; i<=${#stations[@]}; i++}))
+for ((i=$start_rad; i<=${#stations[@]}; i++))
 do
 	rad=${stations[i]}
 	echo "$rad"
