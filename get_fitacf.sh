@@ -16,8 +16,6 @@ source bash_tools.sh
 #Load path to luna data
 luna_path=$(</home/elliott/Documents/python_analysis/luna_path.txt)
 fitacf_path="${luna_path}data/superdarn/fitacf/"
-#create the path
-fpath_to="${luna_path}users/daye1/Superdarn/Data/fitacf/$rad/$year/$MM/"
 
 #get input parameters
 rad=$1
@@ -106,7 +104,6 @@ do
 	then
 		echo "$start_date $start_con $time $end_con $end_date"
 		echo "file name $i is $file in bound_start=$bound_start bound_end=$bound_end"
-		echo "does time preceed = $does_time_preceed"
 	fi
 
 	#echo "$start_date $start_con $time $end_con $end_date"
@@ -145,8 +142,6 @@ do
 		fi
 	fi
 
-	echo "bound start checked"
-
 	#check if file time is after end time
 	if $bound_start
 	then
@@ -164,10 +159,16 @@ do
 	if $bound_start && ! $bound_end
 	then
 		if [[ verbose -gt 0 ]]
+
 		then
 			echo "entered bounds..."
 		fi
+		if [[ $verbose -eq 1 ]]
+		then
+			echo "file name $i is $file"
+		fi
 		fpath_from="$fpath$file"
+		fpath_to="${luna_path}users/daye1/Superdarn/Data/fitacf/$rad/$year/$MM/"
 		staging_area="staging_area/"
 		if [[ $verbose -gt 0 ]]
 		then
@@ -186,7 +187,7 @@ do
 		then
 			echo "copying unzipped file to directory..."
 		fi
-		cp "$staging_area${file%.bz2}" "$fpath_to"
+		mkdir -p "$fpath_to" && cp "$staging_area${file%.bz2}" "$fpath_to"
 		if [[ $verbose -gt 0 ]]
 		then
 			echo "removing file from staging area..."

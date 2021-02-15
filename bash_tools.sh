@@ -9,18 +9,6 @@ strip_zero(){
 	fi
 }
 
-#strip zero test
-#array=("00" "01" "02")
-#for val in "${array[@]}"
-#do
-#	echo "val = $val"
-#	strip_zero $val
-#	echo $retval
-#done
-#
-#test=$(strip_zero "08" && echo $retval)
-#echo "testing is $test"
-
 #function to check if one date is less than another
 date_compare() {
 	#date1 = date to check
@@ -82,22 +70,6 @@ date_compare() {
 		fi
 	fi
 }
-
-#test date_compare function
-#all less than scenarios (month -> day -> hour -> minute -> second)
-#echo "less than tests:"
-#date_compare "2013/09/02_00:00:00" "2013/10/02_00:00:00"
-#date_compare "2013/10/01_00:00:00" "2013/10/02_00:00:00"
-#date_compare "2013/10/02_00:00:00" "2013/10/02_10:10:10"
-#date_compare "2013/10/02_10:00:00" "2013/10/02_10:10:10"
-#date_compare "2013/10/02_10:10:00" "2013/10/02_10:10:10"
-#test greater than scenarios (month -> day -> hour -> minute -> second)
-#echo "greater than tests:"
-#date_compare "2013/11/02_00:00:00" "2013/10/02_00:00:00"
-#date_compare "2013/10/03_00:00:00" "2013/10/02_00:00:00"
-#date_compare "2013/10/02_10:00:00" "2013/10/02_00:00:00"
-#date_compare "2013/10/02_10:10:00" "2013/10/02_10:00:00"
-#date_compare "2013/10/02_10:10:10" "2013/10/02_10:10:00"
 
 #first check if year is a leap year
 isleap() {
