@@ -43,6 +43,7 @@ echo "skipping to start date"
 
 #sum up how many days until the month of the start date
 start_month=$(strip_zero ${start_date:5:2} && echo $retval)
+start_day=$(strip_zero ${start_day:8:2} && echo $retval)
 echo "start_month = $start_month"
 num_days=0
 i=0
@@ -95,20 +96,16 @@ do
 	#check if file time is after start time
 	if [[ !bound_start ]]
 	then
+		if [[ $start_con == ">" ]] && [[ $end_con == "<" ]]
+		then
+			echo "start file found"
+			bound_start=true
 		#if our skipping has brought us to a month >= the start date then go back
-		#a month (we need to include the start month so as to make sure we do not
-		#go past the start date
-		current_month=$(strip_zero $MM && echo $retval)
-		if [[ $current_month -gt $start_month ]]
+		#a month so we can work our way up to the start date
+		elif [[ $start_con == ">" ]] && [[ $end_con == ">" ]]
 		then
 			i=$((i-(31*12)))
 			continue
-		fi
-
-		if [[ $start_con == ">" ]]
-		then
-			echo "file after start date found"
-			bound_start=true
 		else
 			i=$((i+1))
 			continue
