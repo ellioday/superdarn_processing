@@ -34,6 +34,7 @@ if [[ $verbose -gt 0 ]]
 then
 	echo "file list loaded"
 fi
+echo $fitacf_fnames
 
 #get number of days in each month for this year
 isleap $year
@@ -63,9 +64,16 @@ done
 
 #set start conditions
 num_files=${#fitacf_fnames[@]}
+echo "num_files = $num_files"
 bound_start="false"
 bound_end="false"
 i=$(($num_days*12)) # based on 12 files per day from each file ~ 2 hours
+
+#if i is greater than the number of files we need to move i to the end
+if [[ $i -gt $num_files ]]
+then
+	i=$((num_files-1))
+fi
 
 while ! $bound_end || [[ $i -le $num_files ]]
 do
