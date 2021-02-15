@@ -16,6 +16,8 @@ source bash_tools.sh
 #Load path to luna data
 luna_path=$(</home/elliott/Documents/python_analysis/luna_path.txt)
 fitacf_path="${luna_path}data/superdarn/fitacf/"
+#create the path
+fpath_to="${luna_path}users/daye1/Superdarn/Data/fitacf/$rad/$year/$MM/"
 
 #get input parameters
 rad=$1
@@ -65,8 +67,10 @@ done
 #set start conditions
 num_files=${#fitacf_fnames[@]}
 echo "num_files = $num_files"
-bound_start="false"
-bound_end="false"
+#since bool doesnt work in bask use 0=false, 1=true
+bound_start=false
+bound_end=false
+does_time_preceed=false
 i=$(($num_days*12)) # based on 12 files per day from each file ~ 2 hours
 
 #if i is greater than the number of files we need to move i to the end
@@ -75,7 +79,7 @@ then
 	i=$((num_files-1))
 fi
 
-while ! $bound_end || [[ $i -le $num_files ]]
+while ! $bound_end && [[ $i -le $num_files ]]
 do
 
 	#file is the full path to the file
@@ -102,6 +106,7 @@ do
 	then
 		echo "$start_date $start_con $time $end_con $end_date"
 		echo "file name $i is $file in bound_start=$bound_start bound_end=$bound_end"
+		echo "does time preceed = $does_time_preceed"
 	fi
 
 	#echo "$start_date $start_con $time $end_con $end_date"
@@ -109,19 +114,34 @@ do
 	#check if file time is after start time
 	if ! $bound_start
 	then
+		#when files have gone back such that the time preceeds the start time
+		#we can expect to encounter the start time (if it is there)
+		if [[ $start_con == "<" ]]
+		then
+			does_time_preceed=true
+		fi
+
 		if [[ $start_con == ">" ]] && [[ $end_con == "<" ]]
 		then
 			if [[ $verbose -gt 0 ]]
 			then
 				echo "start file found"
 			fi
-			bound_start="true"
+			bound_start=true
 		#if our skipping has brought us to a month >= the start date then go back
 		#a month so we can work our way up to the start date
 		elif [[ $start_con == ">" ]] && [[ $end_con == ">" ]]
 		then
-			i=$((i-(16*12)))
-			continue
+			#if we haven't already gone back before the start date keep going back
+			if ! $does_time_preceed
+			then
+				i=$((i-(16*12)))
+				continue
+			#else if we have already gone before the start date then there are no
+			#files within the requested times
+			else
+				bound_end=true
+			fi
 		fi
 	fi
 
@@ -137,7 +157,6 @@ do
 				echo "all files within dates found"
 			fi
 			bound_end=true
-			break
 		fi
 	fi
 
@@ -149,7 +168,6 @@ do
 			echo "entered bounds..."
 		fi
 		fpath_from="$fpath$file"
-		fpath_to="${luna_path}users/daye1/Superdarn/Data/fitacf/$rad/$year/$MM/"
 		staging_area="staging_area/"
 		if [[ $verbose -gt 0 ]]
 		then
@@ -168,7 +186,7 @@ do
 		then
 			echo "copying unzipped file to directory..."
 		fi
-		mkdir -p "$fpath_to" && cp "$staging_area${file%.bz2}" "$fpath_to"
+		cp "$staging_area${file%.bz2}" "$fpath_to"
 		if [[ $verbose -gt 0 ]]
 		then
 			echo "removing file from staging area..."
