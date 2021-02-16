@@ -181,18 +181,33 @@ do
 		fi
 		#unable to unzip on network drive, so copy to a local staging area
 		mkdir -p $staging_area && cp $fpath_from $staging_area
+
 		#unzip here
 		if [[ $verbose -gt 0 ]]
 		then
 			echo "unzipping..."
 		fi
 		bzip2 -d "$staging_area$file"
+		
+		#remove bz2 from filename		
+		savename=${file%.bz2}
+		#some files have extra bits after the seconds metadata that we dont want in
+		#their name e.g.(YYYYMMDD.hhmm.ss.a.rad.fitacf <- we don't want the ".a")
+		echo "${savename:21:3} ${rad}"
+		if [[ "${savename:21:3}" != "fit" ]]
+		then
+			echo "savename was $savename"
+			savename=${savename:0:21}${savename:23:6}
+			echo "savename is $savename"
+		fi
+
 		#move unzipped file to network drive
 		if [[ $verbose -gt 0 ]]
 		then
-			echo "copying unzipped file to directory..."
+			echo "copying ${savename} to directory..."
 		fi
-		mkdir -p "$fpath_to" && cp "$staging_area${file%.bz2}" "$fpath_to"
+		mkdir -p "$fpath_to" && cp "$staging_area${file%.bz2}" "${fpath_to}/${savename}"
+
 		if [[ $verbose -gt 0 ]]
 		then
 			echo "removing file from staging area..."

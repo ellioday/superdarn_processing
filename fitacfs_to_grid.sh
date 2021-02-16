@@ -1,4 +1,3 @@
-
 help(){
 
 	echo "This merges all .fitacf files for one date for a single radar and converts it into a .grd file"
@@ -29,4 +28,5 @@ grd_name="${year}${month}${day}.${rad}.grd"
 echo "$grd_path$grd_name"
 
 #merge and convert .fitacf files into .grd
-make_grid -vb -tl 60 -xtd -c "$fitacfs_path$fitacf_name" > "$grd_path$grd_name" 
+echo "creating .grd file"
+mkdir -p "$grd_path" && make_grid -vb -tl 60 -xtd -c $fitacfs_path$year$month${day}.*.${rad}.fitacf > "$grd_path$grd_name" 
