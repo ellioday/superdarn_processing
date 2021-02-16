@@ -65,6 +65,11 @@ done
 #set start conditions
 num_files=${#fitacf_fnames[@]}
 echo "num_files = $num_files"
+if [[ $num_files -eq 0 ]]
+then
+	echo "no files found"
+	exit 1
+fi
 #since bool doesnt work in bask use 0=false, 1=true
 bound_start=false
 bound_end=false

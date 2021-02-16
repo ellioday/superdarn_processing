@@ -6,9 +6,16 @@ end_date=$2
 verbose=${3:-0} #set verbose mode either 0 (none) 1(some) 2(all)
 start_rad=${4:-0} #set which radar to start from (0=ade)
 
-for ((i=$start_rad; i<=${#stations[@]}; i++))
+skip_count=0
+for rad in "${stations[@]}"
 do
-	rad=${stations[i]}
-	echo "$rad"
-	source get_fitacf.sh "$rad" "$start_date" "$end_date" "$verbose"
+	#skip number of specified stations
+	if [[ $skip_count -lt start_rad ]]
+	then
+		skip_count=$((skip_count+1))
+		continue
+	fi
+
+	echo "$i = $rad"
+	./get_fitacf.sh "$rad" "$start_date" "$end_date" "$verbose"
 done
