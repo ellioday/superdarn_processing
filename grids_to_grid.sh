@@ -50,5 +50,9 @@ echo "$year $month $day"
 
 #merge all grid files to one
 combine_grid -vb ${to_path}${year}${month}${day}.*.grd > ${to_path}${year}${month}${day}.north.grd
-shopt -s extglob
-rm -- !(${to_path}${year}${month}${day}.north.grd)
+
+#delete individual .grds
+for rad in "${stations[@]}"
+do
+	rm ${to_path}${year}${month}${day}.${rad}.grd
+done
