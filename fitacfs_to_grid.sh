@@ -8,6 +8,8 @@ help(){
 	echo "date (YYYY/MM/DD)"
 }
 
+source bash_tools.sh
+
 #get inputs
 rad=$1
 date=$2
@@ -18,7 +20,6 @@ day=${date:8:2}
 echo "${year} ${month} ${day}"
 
 #get path to .fitacf files
-luna_path=$(</home/elliott/Documents/python_analysis/luna_path.txt)
 fitacfs_path="${luna_path}users/daye1/Superdarn/Data/fitacf/$rad/$year/$month/"
 fitacf_name="${year}${month}${day}.*.${rad}.fitacf"
 echo "$fitacfs_path$fitacf_name"

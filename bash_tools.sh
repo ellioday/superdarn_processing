@@ -1,3 +1,6 @@
+#set the path to the file containing the path to the luna drive
+luna_path=$(</home/elliott/Documents/python_analysis/luna_path.txt)
+
 #function to remove leading zeros from varable (unless variable is zero)
 strip_zero(){
 	value=$1

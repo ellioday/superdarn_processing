@@ -14,7 +14,6 @@ help(){
 source bash_tools.sh
 
 #Load path to luna data
-luna_path=$(</home/elliott/Documents/python_analysis/luna_path.txt)
 fitacf_path="${luna_path}data/superdarn/fitacf/"
 
 #get input parameters
