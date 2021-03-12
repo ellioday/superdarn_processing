@@ -30,7 +30,7 @@ mkdir -p $map_path
 
 #reformat grid to map
 echo "reformatting .grid into .map..."
-map_grd ${grid_path}${grid_name} > ${map_path}${year}${month}${day}.empty.map
+map_grd -l 60 ${grid_path}${grid_name} > ${map_path}${year}${month}${day}.empty.map
 #add heppner-maynard boundary
 echo "adding heppner-maynard boundary..."
 map_addhmb ${map_path}${year}${month}${day}.empty.map > ${map_path}${year}${month}${day}.hmb.map

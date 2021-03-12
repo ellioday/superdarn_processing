@@ -30,4 +30,4 @@ echo "$grd_path$grd_name"
 
 #merge and convert .fitacf files into .grd
 echo "creating .grd file"
-mkdir -p "$grd_path" && make_grid -vb -tl 60 -xtd -c $fitacfs_path$year$month${day}.*.${rad}.fitacf > "$grd_path$grd_name" 
+mkdir -p "$grd_path" && make_grid -vb -tl 600 -i 600 -xtd -c $fitacfs_path$year$month${day}.*.${rad}.fitacf > "$grd_path$grd_name" 
