@@ -36,7 +36,10 @@ echo "adding heppner-maynard boundary..."
 map_addhmb ${map_path}${year}${month}${day}.empty.map > ${map_path}${year}${month}${day}.hmb.map
 #add IMF data
 echo "adding IMF data..."
-map_addimf -bx 1.5 -by -1.2 -bz 0.4 ${map_path}${year}${month}${day}.hmb.map > ${map_path}${year}${month}${day}.imf.map
+imf_data_path="${luna_path}/data/superdarn/ace/"
+imf_path="${imf_data_path}/TS18_mfi/ascii/${year}/${year}${month}${day}.mfi.txt"
+delay_path="${imf_data_path}/delay/ascii/${year}/${year}${month}${day}.delay.txt"
+map_addimf -if ${imf_path} -df ${delay_path} ${map_path}${year}${month}${day}.hmb.map > ${map_path}${year}${month}${day}.imf.map
 #calculate statistical model
 echo "calculating statitical model..."
 map_addmodel -o 8 -d l ${map_path}${year}${month}${day}.imf.map > ${map_path}${year}${month}${day}.model.map
